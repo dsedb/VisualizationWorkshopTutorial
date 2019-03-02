@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-// using Unity.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
 
@@ -51,14 +50,13 @@ public class Data
             data_unit.m_InfoUnitList = new List<InfoUnit>();
             data_unit.m_InfoUnitDictionary = new Dictionary<string, InfoUnit>();
             // CSV読み込み
-            string path = string.Format("{0}/{1}.csv", Application.streamingAssetsPath, time);
+            string path = string.Format("{0}/M_{1}.csv", Application.streamingAssetsPath, time);
             using (var sr = new System.IO.StreamReader(path,
                                                        System.Text.Encoding.GetEncoding("utf-8"))) {
                 int line_num = 0;
                 while (sr.Peek() >= 0) { // 最後まで読み込む
                     var line = sr.ReadLine();
                     var cols = line.Split(','); // カラム分離
-                    // boy's name
                     {
                         var info_unit = new InfoUnit();
                         var name = cols[0];
@@ -75,25 +73,6 @@ public class Data
                         data_unit.m_InfoUnitDictionary.Add(key, info_unit);
                         m_NameSet.Add(key);
                     }
-#if false
-                    // girl's name
-                    {
-                        var info_unit = new InfoUnit();
-                        var name = cols[2];
-                        info_unit.m_Name = name;
-                        var value = System.Int32.Parse(cols[3]);
-                        if (m_MaxValue < value) {
-                            m_MaxValue = value;
-                        }
-                        info_unit.m_Value = value;
-                        info_unit.m_Type = 1;
-                        data_unit.m_InfoUnitList.Add(info_unit);
-                        // boy と girl で同じ名前があり得るので識別子としての名前に接尾辞をつける
-                        var key = name + "_F";
-                        data_unit.m_InfoUnitDictionary.Add(key, info_unit);
-                        m_NameSet.Add(key);
-                    }
-#endif
                     ++line_num;
                     if (line_num >= 30)
                         break;
@@ -107,17 +86,17 @@ public class Data
     public void dump()
     {
         Debug.Log(m_NameSet.Count);
-        // foreach (var name in m_NameSet) {
-        //     Debug.Log(name);
-        // }
-        // foreach (var data_unit in m_DataUnitList) {
-        //     Debug.Log(data_unit.m_Time);
-        //     foreach (var info_unit in data_unit.m_InfoUnitList) {
-        //         Debug.LogFormat("{0}:{1}:{2}", info_unit.m_Type == 0 ? "M" : "F",
-        //                         info_unit.m_Name,
-        //                         info_unit.m_Value);
-        //     }
-        // }
+        foreach (var name in m_NameSet) {
+            Debug.Log(name);
+        }
+        foreach (var data_unit in m_DataUnitList) {
+            Debug.Log(data_unit.m_Time);
+            foreach (var info_unit in data_unit.m_InfoUnitList) {
+                Debug.LogFormat("{0}:{1}:{2}", info_unit.m_Type == 0 ? "M" : "F",
+                                info_unit.m_Name,
+                                info_unit.m_Value);
+            }
+        }
     }
 }
 
