@@ -77,11 +77,11 @@ public class DataVisualizer : MonoBehaviour
     IEnumerator loop()
     {
         // 存在する年代リスト
-        var times = m_Data.GetKeyTimeList();
+        var titles = m_Data.GetKeyTitleList();
         for (;;) {              // 無限ループ
             int i = 0;
             foreach (var data_unit in m_Data.m_DataUnitList) { // 年代ごとのデータ
-                m_TextTime.text = string.Format("{0}'s", times[i]); // 表示設定
+                m_TextTime.text = string.Format("{0}'s", titles[i]); // 表示設定
                 update(data_unit); // 拡大率更新
                 ++i;
                 yield return new WaitForSeconds(4f); // ４秒待機

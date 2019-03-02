@@ -21,7 +21,7 @@ public class Element : MonoBehaviour
     {
         if (data_unit.m_InfoUnitDictionary.ContainsKey(m_Name)) { // 存在チェック
             var info_unit = data_unit.m_InfoUnitDictionary[m_Name]; // 情報取得
-            m_TargetScale = ((float)info_unit.m_Value)*ratio; // ターゲットスケール更新
+            m_TargetScale = info_unit.m_Value * ratio; // ターゲットスケール更新
         } else {
             m_TargetScale = 0f; // スケールゼロ
         }
