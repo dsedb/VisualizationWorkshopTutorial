@@ -46,7 +46,7 @@ public class Element : MonoBehaviour
     void Update()
     {
         // スケールをターゲットスケールに近づけるアニメーション
-        m_CurrentScale = Mathf.Lerp(m_CurrentScale, m_TargetScale, 0.02f);
+        m_CurrentScale = Mathf.Lerp(m_CurrentScale, m_TargetScale, 0.01f);
         // 指定スケールを面積と扱うために1/2乗して設定
         transform.localScale = Vector3.one * Mathf.Sqrt(m_CurrentScale);
         if (m_CurrentScale < 0.5f) { // 面積が規定値を下回った場合は
