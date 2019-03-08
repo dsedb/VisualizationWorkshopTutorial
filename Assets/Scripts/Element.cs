@@ -27,24 +27,29 @@ public class Element : MonoBehaviour
         }
     }
 
-    // Unityにより自動的に呼ばれるUpdate
-    void Update()
+    // 物理エンジンの動作タイミングで毎フレーム呼ばれるUnityにより自動的に呼ばれる
+    void FixedUpdate()
     {
-        if (m_Name == null)     // 念の為nullアクセス回避
-            return;
-        // スケールをターゲットスケールに近づけるアニメーション
-        m_CurrentScale = Mathf.Lerp(m_CurrentScale, m_TargetScale, 0.02f);
-        // スケールを設定
-        transform.localScale = new Vector3(m_CurrentScale, m_CurrentScale, 1f);
         // バラバラにならないよう、中心に向けて弱く外力を働かせておく
-        var center = new Vector2(0f, 2f);
-        var force = new Vector2((center.x - transform.position.x)*0.5f, (center.y - transform.position.y)*0.1f);
+        var center = new Vector2(0f, 0f);
+        // 現在の座標を２次元ベクトルに
+        var pos = new Vector2(transform.position.x, transform.position.y);
+        // 距離に比例する外力（いわゆるバネ）
+        var force = (center - pos)*0.5f;
         // 剛体コンポーネント
         var rb = GetComponent<Rigidbody2D>();
         // 外力を追加
         rb.AddForce(force);
+    }
 
-        if (m_CurrentScale < 0.25f) { // スケールが規定値を下回った場合は
+    // 毎フレーム呼ばれる
+    void Update()
+    {
+        // スケールをターゲットスケールに近づけるアニメーション
+        m_CurrentScale = Mathf.Lerp(m_CurrentScale, m_TargetScale, 0.02f);
+        // 指定スケールを面積と扱うために1/2乗して設定
+        transform.localScale = Vector3.one * Mathf.Sqrt(m_CurrentScale);
+        if (m_CurrentScale < 0.5f) { // 面積が規定値を下回った場合は
             if (m_NameObject.activeSelf) {
                 // 表示をオフにする
                 m_NameObject.SetActive(false);

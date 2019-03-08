@@ -30,7 +30,7 @@ public class DataVisualizer : MonoBehaviour
         m_ElementList = new List<Element>();
         foreach (var name in m_Data.m_NameSet) { // 名前の数だけイテレーション
             // 初期位置を乱数で決定
-            var pos = new Vector3(Random.Range(-3f, 3f), Random.Range(-2f, 0f), 0f);
+            var pos = new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), 0f);
             // elemプレハブから生成
             var elem_obj = Instantiate(m_ElemPrefab, pos, Quaternion.identity);
             // 生成オブジェクトから Elem.cs のオブジェクトを取得
@@ -66,7 +66,7 @@ public class DataVisualizer : MonoBehaviour
     // loopから呼ばれる更新関数 (Updateと違い、勝手には呼ばれない）
     void update(DataUnit data_unit)
     {
-        const float magnify = 16f; // 定数
+        const float magnify = 196; // 円の最大面積
         var ratio = magnify/m_Data.m_MaxValue; // 拡大率を最大値から算出
         foreach (var elem in m_ElementList) {  // 全ての要素に対して
             elem.SetTargetData(data_unit, ratio); // 正規化のため拡大率を指定してElement.csの関数を呼ぶ
@@ -78,15 +78,17 @@ public class DataVisualizer : MonoBehaviour
     {
         // 存在する年代リスト
         var titles = m_Data.GetKeyTitleList();
+        m_TextTime.text = "";                // 年代テキストクリア
+        yield return new WaitForSeconds(1f); // 待機秒
         for (;;) {              // 無限ループ
             int i = 0;
             foreach (var data_unit in m_Data.m_DataUnitList) { // 年代ごとのデータ
                 m_TextTime.text = string.Format("{0}'s", titles[i]); // 表示設定
                 update(data_unit); // 拡大率更新
                 ++i;
-                yield return new WaitForSeconds(4f); // ４秒待機
+                yield return new WaitForSeconds(4f); // 待機秒
             }
-            yield return new WaitForSeconds(10f); // 10秒待機
+            yield return new WaitForSeconds(10f); // 待機秒
         }
     }
 }
